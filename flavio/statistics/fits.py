@@ -700,7 +700,7 @@ class FastFit(Fit):
             else:
                 opt = scipy.optimize.minimize(f, **kwargs)
         if not opt.success:
-            raise ValueError("Optimization failed.")
+            raise ValueError("Optimization failed: {}".format(opt.message))
         else:
             return {'x': opt.x, 'log_likelihood': -opt.fun}
 
