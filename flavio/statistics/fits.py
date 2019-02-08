@@ -479,25 +479,34 @@ class FastFit(Fit):
                                                  par=False, nuisance=True,
                                                  wc=False)
 
+    def _get_random_meas(self, _, m_obj, our_obs):
+        m_random = m_obj.get_random_all()
+        return [m_random[k] for k in our_obs]
 
     # a method to get the mean and covariance of all measurements of all
     # observables of interest
-    def _get_central_covariance_experiment(self, N=5000):
+    def _get_central_covariance_experiment(self, N=5000, threads=1):
         means = []
         covariances = []
         for measurement in self.get_measurements:
             m_obj = flavio.Measurement[measurement]
             # obs. included in the fit and constrained by this measurement
             our_obs = set(m_obj.all_parameters).intersection(self.observables)
+            # fix order of our_obs
+            our_obs = tuple(our_obs)
             # construct a dict. containing a vector of N random values for
             # each of these observables
-            random_dict = {}
-            for obs in our_obs:
-                random_dict[obs] = np.zeros(N)
-            for i in range(N):
-                m_random = m_obj.get_random_all()
-                for obs in our_obs:
-                    random_dict[obs][i] = m_random[obs]
+            get_random_meas = partial(self._get_random_meas, m_obj=m_obj,
+                                                        our_obs=our_obs)
+            if threads == 1:
+                random_list = list(map(get_random_meas, range(N)))
+            else:
+                pool = Pool(threads)
+                random_list = pool.map(get_random_meas, range(N))
+                pool.close()
+                pool.join()
+            tmp_arr = np.array(random_list).T
+            random_dict = {k:tmp_arr[i] for i, k in enumerate(our_obs)}
             # mean = np.zeros(len(self.observables))
             random_arr = np.zeros((len(self.observables), N))
             for i, obs in enumerate(self.observables):
@@ -540,7 +549,7 @@ class FastFit(Fit):
                                 axis=0))
             return weighted_mean, weighted_covariance
 
-    def get_exp_central_covariance(self, N=5000, force=True):
+    def get_exp_central_covariance(self, N=5000, force=True, threads=1):
         """Return the experimental central values and the covriance matrix of
         all observables.
 
@@ -552,7 +561,7 @@ class FastFit(Fit):
           if it already has been computed.
         """
         if self._exp_central_covariance is None or force:
-            self._exp_central_covariance = self._get_central_covariance_experiment(N=N)
+            self._exp_central_covariance = self._get_central_covariance_experiment(N=N, threads=threads)
         elif N != 5000:
             warnings.warn("Argument N={} ignored ".format(N) + \
                           "as experimental covariance has already been " + \
@@ -710,7 +719,7 @@ class FastFit(Fit):
         - `force_exp`: if True, will recompute experimental central values and
           covariance even if they have already been computed. Defaults to False.
         """
-        central_exp, cov_exp = self.get_exp_central_covariance(Nexp, force=force_exp)
+        central_exp, cov_exp = self.get_exp_central_covariance(Nexp, force=force_exp, threads=threads)
         cov_sm = self.get_sm_covariance(N, force=force, threads=threads)
         covariance = cov_exp + cov_sm
         # add the Pseudo-measurement

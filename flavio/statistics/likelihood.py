@@ -7,6 +7,8 @@ import pickle
 from flavio.classes import NamedInstanceClass
 from flavio.statistics.probability import NormalDistribution, MultivariateNormalDistribution
 from flavio.io import instanceio as iio
+from functools import partial
+from multiprocessing import Pool
 
 
 class MeasurementLikelihood(iio.YAMLLoadable):
@@ -419,7 +421,11 @@ class MeasurementCovariance(object):
         self.measurement_likelihood = measurement_likelihood
         self._central_cov = None
 
-    def compute(self, N):
+    def _get_random_meas(self, _, m_obj, our_obs):
+        m_random = m_obj.get_random_all()
+        return [m_random[k] for k in our_obs]
+
+    def compute(self, N, threads=1):
         """Compute the covariance for `N` random values."""
         ml = self.measurement_likelihood
         means = []
@@ -430,7 +436,18 @@ class MeasurementCovariance(object):
             our_obs = set(m_obj.all_parameters).intersection(ml.observables)
             # construct a dict. containing a vector of N random values for
             # each of these observables
-            random_dict = m_obj.get_random_all(size=N)
+            if threads == 1:
+                random_dict = m_obj.get_random_all(size=N)
+            else:
+                our_obs = tuple(our_obs)
+                get_random_meas = partial(self._get_random_meas, m_obj=m_obj,
+                                          our_obs=our_obs)
+                pool = Pool(threads)
+                random_list = pool.map(get_random_meas, range(N))
+                pool.close()
+                pool.join()
+                tmp_arr = np.array(random_list).T
+                random_dict = {k:tmp_arr[i] for i, k in enumerate(our_obs)}
             random_arr = np.zeros((len(ml.observables), N))
             for i, obs in enumerate(ml.observables):
                 if obs in our_obs:
@@ -471,13 +488,13 @@ class MeasurementCovariance(object):
                                 axis=0))
             return weighted_mean, weighted_covariance
 
-    def get(self, N=5000, force=True):
+    def get(self, N=5000, force=True, threads=1):
         """Compute the covariance for `N` random values (default: 5000).
 
         If `force` is False, return a cached version if it exists.
         """
         if self._central_cov is None or force:
-            self._central_cov = self.compute(N=N)
+            self._central_cov = self.compute(N=N, threads=threads)
         elif N != 5000:
             warnings.warn("Argument N={} ignored ".format(N) + \
                           "as experimental covariance has already been " + \
@@ -649,7 +666,8 @@ class FastLikelihood(NamedInstanceClass, iio.YAMLLoadable):
         - `force_exp`: if True, will recompute experimental central values and
           covariance even if they have already been computed. Defaults to False.
         """
-        central_exp, cov_exp = self.exp_covariance.get(Nexp, force=force_exp)
+        central_exp, cov_exp = self.exp_covariance.get(Nexp, force=force_exp,
+                                                       threads=threads)
         cov_sm = self.sm_covariance.get(N, force=force, threads=threads)
         covariance = cov_exp + cov_sm
         # add the Pseudo-measurement
