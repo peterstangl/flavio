@@ -123,7 +123,7 @@ a1_perp_rho+: 0
 # the "hatted" ones need to be divided by 1.517
 # (for B_q) and 1.369 (for K) to obtain the MSbar ones
 # (see also flavio.physics.mesonmixing.common.bag_msbar2rgi())
-bag_K0_1: 0.5237(131)(117)  # =0.717(18)(16) for Bhat. FLAG 2016 Nf=2+1+1
+bag_K0_1: 0.5596(71)  # =0.7625(97) for Bhat. FLAG 2016 Nf=2+1
 
 # BSM operators
 bag_K0_2: 0.468(7)(16)   # 1609.03334 table VI; converted from 3->2 GeV by multpying with 0.96
