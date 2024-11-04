@@ -15,9 +15,9 @@ from flavio.physics import ckm
 def matrixelements(par, meson):
     r"""Returns a dictionary with the values of the matrix elements of the
     $\Delta F=2$ operators.
-    
+
     Note that the normalisation factor 1/2M from M_12 is included here,
-    so the returned values of the matrix elements are really    
+    so the returned values of the matrix elements are really
     $$\langle Q \rangle = \frac{\langle M | Q |\bar M\rangle}{2M_M}$$
     """
     mM = par['m_'+meson]
@@ -50,7 +50,11 @@ def M12_d_SM(par, meson):
     """
     me = matrixelements(par, meson)
     scale = config['renormalization scale'][meson + ' mixing']
-    alpha_s = running.get_alpha(par, scale)['alpha_s']
+    if meson in ['B0', 'Bs']:
+        nf = 5
+    elif meson == 'K0':
+        nf = 3
+    alpha_s = running.get_alpha_s(par, scale, nf_out=nf)
     me_rgi = me['CVLL'] * bag_msbar2rgi(alpha_s, meson)
     cvll_d_SM_rgi = cvll_d(par, meson)
     return - cvll_d_SM_rgi * me_rgi

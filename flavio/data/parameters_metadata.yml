@@ -963,7 +963,7 @@ bag_Bs_1:
   description: $B_s$ bag parameter of $O_1$ in the $\overline{\text{MS}}$ scheme at $m_b$
 bag_K0_1:
   tex: $B_1^{(K)}$
-  description: $K^0$ bag parameter of $O_1$ in the $\overline{\text{MS}}$ scheme at 2 GeV
+  description: $K^0$ bag parameter of $O_1$ in the $\overline{\text{MS}}$ scheme at 3 GeV
 bag_D0_1:
   tex: $B_1^{(D)}$
   description: $D^0$ bag parameter of $O_1$ in the $\overline{\text{MS}}$ scheme at 2 GeV
@@ -996,16 +996,16 @@ bag_Bs_5:
 
 bag_K0_2:
   tex: $B_2^{(K)}$
-  description: $K^0$ bag parameter of $O_2$ in the $\overline{\text{MS}}$ scheme at 2 GeV
+  description: $K^0$ bag parameter of $O_2$ in the $\overline{\text{MS}}$ scheme at 3 GeV
 bag_K0_3:
   tex: $B_3^{(K)}$
-  description: $K^0$ bag parameter of $O_3$ in the $\overline{\text{MS}}$ scheme at 2 GeV
+  description: $K^0$ bag parameter of $O_3$ in the $\overline{\text{MS}}$ scheme at 3 GeV
 bag_K0_4:
   tex: $B_4^{(K)}$
-  description: $K^0$ bag parameter of $O_4$ in the $\overline{\text{MS}}$ scheme at 2 GeV
+  description: $K^0$ bag parameter of $O_4$ in the $\overline{\text{MS}}$ scheme at 3 GeV
 bag_K0_5:
   tex: $B_5^{(K)}$
-  description: $K^0$ bag parameter of $O_5$ in the $\overline{\text{MS}}$ scheme at 2 GeV
+  description: $K^0$ bag parameter of $O_5$ in the $\overline{\text{MS}}$ scheme at 3 GeV
 
 bag_D0_2:
   tex: $B_2^{(D)}$

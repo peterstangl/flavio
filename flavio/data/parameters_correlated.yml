@@ -331,6 +331,23 @@
     [0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 1.000]]
 
 
+# Kaon SM and BSM bag parameters, RBC/UKQCD 2024, 2404.02297v1
+-
+  values:
+    - bag_K0_1: 0.5240(17)(54)
+    - bag_K0_2: 0.4794(25)(35)
+    - bag_K0_3: 0.746(13)(17)
+    - bag_K0_4: 0.897(02)(10)
+    - bag_K0_5: 0.6882(78)(94)
+  correlation:
+    [[1.0, 0.558, -0.207, 0.363, 0.422],
+     [0.558, 1.0, -0.21, 0.172, 0.474],
+     [-0.207, -0.21, 1.0, -0.29, -0.879],
+     [0.363, 0.172, -0.29, 1.0, 0.499],
+     [0.422, 0.474, -0.879, 0.499, 1.0]]
+
+
+
 # B_q SM and BSM  bag parameters, 2023 GSSS (arXiv:2212.10497) combination of
 # - KLR 2019, arXiv:1904.00940v2
 # - HPQCD 2019, arXiv:1907.01025v2
@@ -393,7 +410,7 @@
 
 # Electromagnetic corrections in Kl3 decays
 # 1005.2323 table 1 & eq. 18
-# Set just the Kmu3 parameters here, as we use 
+# Set just the Kmu3 parameters here, as we use
 # updated Ke3 values (but without correlations)
 -
   values:
