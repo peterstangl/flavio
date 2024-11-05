@@ -128,11 +128,11 @@ def get_alpha_e(par, scale, nf_out=None):
         raise ValueError("Invalid value: nf_out={}".format(nf_out))
 
 
-def get_alpha_s(par, scale, nf_out=None):
+def get_alpha_s(par, scale, nf_out=None, nloops=5):
     r"""Get the running $\overline{\mathrm{MS}}$ QCD coupling constant
     $\alpha_s$ at the specified scale."""
     nf = nf_out or get_nf(scale)
-    return qcd.alpha_s(scale=scale, f=nf, alphasMZ=par['alpha_s'])
+    return qcd.alpha_s(scale=scale, f=nf, alphasMZ=par['alpha_s'], loop=nloops)
 
 
 def get_alpha(par, scale, nf_out=None):
