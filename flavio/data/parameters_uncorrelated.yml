@@ -138,7 +138,7 @@ eta_uu_K0_ut: 1.87(76) # equal amplitudes with ut and ct unitarity
 
 # Parameters needed for epsilon_K
 
-kappa_epsilon: 0.923(6)       # 1111.1699
+kappa_epsilon: 0.94(2)       # 1002.3612
 DeltaM_K0: 3.483(6)e-15 # PDG; this is (0.5293±0.0009)*1e10/s
 
 # Parameters needed for K decays
