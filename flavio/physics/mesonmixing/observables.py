@@ -97,8 +97,9 @@ def phi12(wc_obj, par, meson):
 def epsK(wc_obj, par):
     M12, G12 = get_M12_G12(wc_obj, par, 'K0')
     keps =  par['kappa_epsilon']
+    delta_mc = par['delta_epsK_mc']
     DMK =  par['DeltaM_K0']
-    return keps * M12.imag / DMK / sqrt(2)
+    return (1+delta_mc) * keps * M12.imag / DMK / sqrt(2)
 
 def amplitude_BJpsiK(par):
     xi_c = ckm.xi('c', 'bd')(par) # V_cb V_cd*

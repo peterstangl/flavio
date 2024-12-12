@@ -1055,6 +1055,9 @@ eta_uu_K0_ut:
 kappa_epsilon:
   tex: $\kappa_\epsilon$
   description: Correction factor for $\epsilon_K$
+delta_epsK_mc:
+  tex: $\delta_{m_c}$
+  description: Power correction to $\epsilon_K$ from dimension-8 operators due to finite value of charm quark mass
 DeltaM_K0:
   tex: $\Delta M_K$
   description: Mass difference in the $K^0$ system
