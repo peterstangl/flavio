@@ -1,6 +1,7 @@
 from math import pi, sqrt, cos, sin
 from cmath import phase
 import cmath
+from functools import lru_cache
 
 meson_quark = { 'B0': 'bd', 'Bs': 'bs', 'K0': 'sd', 'D0': 'uc' }
 
@@ -19,6 +20,12 @@ def bag_msbar2rgi(alpha_s, meson):
     elif meson == 'K0': # nf=3
         J = 307/162.
         g = 2/9.
+    return alpha_s**(-g) * (1 + alpha_s/(4*pi) * J)
+
+@lru_cache(maxsize=None)
+def bag_msbar2rgi_generic(alpha_s, nf):
+    g = 6/(33-2*nf)
+    J = (2*nf*(4*nf-813)+13095)/(6*(33-2*nf)**2)
     return alpha_s**(-g) * (1 + alpha_s/(4*pi) * J)
 
 def DeltaM(M12, G12):
